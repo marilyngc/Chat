@@ -5,6 +5,8 @@ import { __dirname } from "./utils.js";
 import { viewsRouter } from "./routes/views.routes.js";
 import { Server } from "socket.io";
 import { Socket } from "socket.io";
+import { connectDB } from "./config/dbConnection.js";
+
 
 
 const port = process.env.PORT || 8080;
@@ -28,6 +30,9 @@ app.set('view engine', '.hbs');
 app.set('views', path.join(__dirname,"/views")); // => /src/views
 
 
+// conexion base de datos
+connectDB();
+
 // routes
 app.use(viewsRouter);
 
@@ -37,11 +42,18 @@ let chat = [];
 // socket servidor
 io.on("connection",(socket)=>{
     //cuando se conecta el usuario, le enviamos el historial del chat
-socket.emit("chatHistory", chat);
+    console.log(socket.id);
+    socket.emit("chatHistory", chat);
 
 // recibimos el mensaje de cada usuario
-    socket.on("msgChat", (data)=>{
-        console.log(data);
+    socket.on("message", (body)=>{
+        console.log(body);
+        //mandamos un mensaje global
+        socket.broadcast.emit("body",{
+            //contenido del mensaje
+            body,
+            from:socket.id.slice(6)
+        });
         chat.push(data);
 
         // enviamos el historial del chat a todos los ususrios conectados
