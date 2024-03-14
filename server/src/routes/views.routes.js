@@ -4,7 +4,7 @@ const router = Router();
 
 
 router.get("/",(req,res)=>{
-    res.render("home");
+   res.sendFile(process.cwd() + "/frontend/src/App.jsx")
 });
 
 

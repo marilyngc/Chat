@@ -1,34 +1,25 @@
 import express from "express";
 import path from "path";
-import {engine} from "express-handlebars";
 import { __dirname } from "./utils.js";
 import { viewsRouter } from "./routes/views.routes.js";
 import { Server } from "socket.io";
-import { Socket } from "socket.io";
 import { connectDB } from "./config/dbConnection.js";
+import { config } from "./config/config.js";
+import  logger  from "morgan";
+import { createServer } from "node:http";
+import cors from "cors";
 
-
-
-const port = process.env.PORT || 8080;
-const app = express();
-
-//midlewares
-app.use(express.json()); // recibir informacion json del cliente
-app.use(express.static(path.join(__dirname,"/public"))); // chat/src/public
-
-
+const port =  8080;
 // servidor de http con express
-const httpServer = app.listen(port,()=> console.log("server working"));
-
+const app = express();
+const server = createServer(app);
 // servidor de websocket
-const io = new Server(httpServer);
+const io = new Server(server);
 
+app.use(logger("dev"));
+app.use(cors());
 
-// confuguracion de motor de plantillas handlebars
-app.engine('.hbs', engine({extname: '.hbs'}));
-app.set('view engine', '.hbs');
-app.set('views', path.join(__dirname,"/views")); // => /src/views
-
+server.listen(port,()=> {console.log(`server working on ${port}`)});
 
 // conexion base de datos
 connectDB();
@@ -37,32 +28,38 @@ connectDB();
 app.use(viewsRouter);
 
 
-let chat = [];
+
 
 // socket servidor
 io.on("connection",(socket)=>{
     //cuando se conecta el usuario, le enviamos el historial del chat
     console.log(socket.id);
-    socket.emit("chatHistory", chat);
+    // socket.emit("chatHistory", chat);
 
 // recibimos el mensaje de cada usuario
     socket.on("message", (body)=>{
-        console.log(body);
+        console.log("body global",body);
         //mandamos un mensaje global
-        socket.broadcast.emit("body",{
+        socket.broadcast.emit("message",{
             //contenido del mensaje
             body,
             from:socket.id.slice(6)
         });
-        chat.push(data);
+        // io.emit("message",body);
 
-        // enviamos el historial del chat a todos los ususrios conectados
-        io.emit("chatHistory",chat);
+        // // enviamos el historial del chat a todos los ususrios conectados
+        // io.emit("chatHistory",chat);
     });
+
+  
 
     // recibimos mensaje de coneccion de nuevo cliente
     socket.on("authenticated",(data)=>{
         // => broadcast es para emitir la información al todos los usuarios menos al que se está logueando
         socket.broadcast.emit("newUser",`El usuario ${data.name} se acaba de conectar `)
     });
+
+    socket.on("disconnect", () => {
+        console.log("se a desconectado un usuario");
+    })
 });
