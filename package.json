@@ -2,12 +2,12 @@
   "name": "chat",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/src/app.js --ignore frontend",
-    "build": "npm run --prefix frontend dist"
+    "build": "npm run --prefix frontend build"
   },
   "keywords": [],
   "author": "",
