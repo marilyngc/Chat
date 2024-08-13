@@ -10,7 +10,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/socket.io": {
-        target:process.env.VITE_BACKEND_URL,
+        target:process.env.VITE_BACKEND_URL || 'http://localhost:8080',
         ws:true
       }
     }
