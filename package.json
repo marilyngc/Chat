@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/src/app.js --ignore frontend"
+    "start": "nodemon server/src/app.js --ignore frontend",
+    "build": "npm run --prefix frontend dist"
   },
   "keywords": [],
   "author": "",
