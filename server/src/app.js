@@ -29,6 +29,11 @@ connectDB();
 // routes
 app.use(viewsRouter);
 
+// Rutas para el frontend
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend/dist', 'index.html'));
+  });
+  
 
 
 
