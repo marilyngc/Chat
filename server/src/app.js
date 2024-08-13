@@ -9,12 +9,17 @@ import  logger  from "morgan";
 import { createServer } from "node:http";
 import cors from "cors";
 
-const port =  8080;
+const port =  process.env.PORT || 8080;
 // servidor de http con express
 const app = express();
 const server = createServer(app);
 // servidor de websocket
-const io = new Server(server);
+const io = new Server(server, {
+    cors: {
+      origin: "*", // Configura esto según tus necesidades
+      methods: ["GET", "POST"]
+    }
+  });
 
 app.use(logger("dev"));
 app.use(cors());
