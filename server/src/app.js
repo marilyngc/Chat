@@ -1,6 +1,5 @@
 import express from "express";
-import path from "path";
-import { __dirname } from "./utils.js";
+import {__dirname } from "./utils.js";
 import { viewsRouter } from "./routes/views.routes.js";
 import { Server } from "socket.io";
 import { connectDB } from "./config/dbConnection.js";
@@ -9,11 +8,8 @@ import  logger  from "morgan";
 import { createServer } from "node:http";
 import cors from "cors";
 
-import dotenv from 'dotenv';
 
-dotenv.config()
-
-const port =  process.env.PORT || 8080;
+const port =  config.server.port;
 // servidor de http con express
 const app = express();
 const server = createServer(app);
@@ -25,6 +21,7 @@ const io = new Server(server, {
     }
   });
 
+app.use(express.static(path.join(__dirname, 'frontend/dist')));
 app.use(logger("dev"));
 app.use(cors());
 
