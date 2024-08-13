@@ -9,6 +9,10 @@ import  logger  from "morgan";
 import { createServer } from "node:http";
 import cors from "cors";
 
+import dotenv from 'dotenv';
+
+dotenv.config()
+
 const port =  process.env.PORT || 8080;
 // servidor de http con express
 const app = express();
