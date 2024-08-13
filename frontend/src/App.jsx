@@ -4,7 +4,7 @@ import './App.css'
 
 
 // conectamos al backend
-const socket = io("/");// está en vite.cofig
+const socket = io('/');// está en vite.cofig
 function App() {
   const [message, setMessage] = useState("");
   // arreglo de mensjes para guardar los mensajes que se envian
