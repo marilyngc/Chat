@@ -16,6 +16,8 @@ const server = createServer(app);
 // servidor de websocket
 const io = new Server(server);
 
+// Middleware para servir archivos estáticos del frontend
+app.use(express.static(path.join(__dirname, 'frontend/dist')));
 app.use(logger("dev"));
 app.use(cors());
 
