@@ -1,5 +1,6 @@
 import express from "express";
 import {__dirname } from "./utils.js";
+import path  from "path";
 import { viewsRouter } from "./routes/views.routes.js";
 import { Server } from "socket.io";
 import { connectDB } from "./config/dbConnection.js";
